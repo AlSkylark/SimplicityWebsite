@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="twelve columns u-full-width">
+        <div class="comicContainer">
+
+                <div class="dropdown">                    
+                    <select (change)="loadSpecific($event.target.value)" name="Pages" id="selectDropdown">
+                        <option #pageDropdown *ngFor="let i of pag; let last = last" value="{{i}}">{{i}}</option>
+                    </select>
+                </div>
+
+                <div *ngIf="leftVisible" id="arrow" (click)="switchComic(true)" class="leftarrow">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 568.38 795.66" class="arrow">
+                        <title>< previous</title>
+                        <polygon points="1.24 397.83 316.84 1.36 422.8 85.7 174.34 397.83 422.8 709.96 316.84 794.3 1.24 397.83"/>
+                        <path d="M652.12,126.55l104.44,83.14L509.19,520.45l-1,1.21,1,1.2L756.56,833.63,652.12,916.77,337.63,521.7l0,0,0,0L652.12,126.55m-.31-2.72L336.12,520.41l-1,1.25,1,1.25L651.81,919.49l107.47-85.55L510.7,521.66,759.28,209.38,651.81,123.83Z" transform="translate(-335.12 -123.83)"/>
+                    </svg>
+                
+                </div>
+                
+                <div class="comic">
+                        
+                    <div class="comicRow">
+
+                        <div [@leftAnim]="leftFront"  
+                        (@leftAnim.done)="onAnimationEnd($event)" 
+                        class="comicBoxLeft">
+                            <img id="{{comicLeft.id}}" src="{{comicLeft.imgurl}}" alt="{{comicLeft.alt}}" class="comicImage">
+                            <h6 class="caption">{{comicLeft.caption}}</h6>
+                        </div>
+
+                        <div [@centerAnim]="centerFront" class="comicBoxMain">
+                            <app-loading *ngIf="$isLoading | async"></app-loading>
+                            <img *ngIf="imgBool" (load)="imgLoad()" id="{{comicMain.id}}" src="{{comicMain.imgurl}}" alt="{{comicMain.alt}}" class="comicImage">
+                            <h6 *ngIf="!($isLoading | async)" class="caption">{{comicMain.caption}}</h6>
+                        </div>
+
+                        <div [@rightAnim]="rightFront" 
+                        (@rightAnim.done)="onAnimationEnd($event)" 
+                        class="comicBoxRight">
+                            <img id="{{comicRight.id}}" src="{{comicRight.imgurl}}" alt="{{comicRight.alt}}" class="comicImage">
+                            <h6 class="caption">{{comicRight.caption}}</h6>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div *ngIf="rightVisible" id="arrow" (click)="switchComic(false)" class="rightarrow">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 568.38 795.66" class="rarrow" >
+                        <title>next ></title>
+                        <polygon points="1.24 397.83 316.84 1.36 422.8 85.7 174.34 397.83 422.8 709.96 316.84 794.3 1.24 397.83"/>
+                        <path d="M652.12,126.55l104.44,83.14L509.19,520.45l-1,1.21,1,1.2L756.56,833.63,652.12,916.77,337.63,521.7l0,0,0,0L652.12,126.55m-.31-2.72L336.12,520.41l-1,1.25,1,1.25L651.81,919.49l107.47-85.55L510.7,521.66,759.28,209.38,651.81,123.83Z" transform="translate(-335.12 -123.83)"/>
+                    </svg>
+
+                </div>
+
+
+
+        </div>
+    </div>
+</div>

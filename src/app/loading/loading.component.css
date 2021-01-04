@@ -1,0 +1,119 @@
+
+  /* #Layer_2 {
+      transform: scale(40%) translateY(-70%);
+  } */
+  /* .hover{
+    transform:scale(10%);
+    animation-name: move;
+  }
+  .hover2{
+    transform:scale(10%);
+    animation-name: move2;
+}
+
+.hover, .hover2{
+    
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-timing-function: ease-in-out;
+    offset-path: path(
+        "M92,48.22A55.08,55.08,0,0,1,69.3,90a64.64,64.64,0,0,1-13.43,7.32c-1.28.51-2.56,1-3.86,1.44a2.53,2.53,0,0,1-2,0c-.76-.27-1.52-.54-2.28-.83a66.78,66.78,0,0,1-7.45-3.31,56.49,56.49,0,0,1-19.95-16.9,55.51,55.51,0,0,1-9.41-22A45.06,45.06,0,0,1,13.62,29.5C21.1,12,39.12,1.64,57.08,4.46S89.36,22.8,91.66,41.76A42.25,42.25,0,0,1,92,48.22Z"
+    );
+  }
+
+  @keyframes move {
+    0% {
+        offset-distance: 0%;
+    }
+    100% {
+        offset-distance: 200%;
+    }
+  } */
+  
+  .path {
+    fill: transparent;
+    stroke: black;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-dasharray: 274;
+    stroke-dashoffset: 274;
+    animation: dash;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-timing-function: ease-in-out;
+  }
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -273;
+    }
+  }
+  
+  .heartp {
+      stroke: black;
+      stroke-width: 2px;
+      fill: transparent;
+      stroke-linecap: round;
+      stroke-dasharray: 157;
+      stroke-dashoffset: 157;
+      animation: heartp;
+      animation-duration: 3.5s;
+      animation-iteration-count: infinite;
+      animation-direction: reverse;
+      animation-timing-function: ease-in-out;
+  }
+
+  @keyframes heartp {
+    to {
+      stroke-dashoffset: -156;
+    }
+  }
+
+  .eye{
+    stroke: black;
+    stroke-width: 1px;
+    fill: transparent;
+    stroke-linecap: round;
+    stroke-dasharray: 2;
+    stroke-dashoffset: 0;
+    animation: eye;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: reverse;
+    animation-timing-function: linear;
+  }
+  @keyframes eye{
+      100%{
+        stroke-dashoffset: 4;
+      }
+  }
+
+  .cls-1 {
+    fill:transparent;
+  }
+  .heartinside{
+      fill:transparent;
+  }
+
+  /* .heartinside{
+      animation: opacity;
+      animation-duration: 5s;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      animation-timing-function: ease-in-out;
+  } */
+
+
+/* 
+  @keyframes opacity {
+      0%{
+          opacity: 0;
+          filter: blur(10px);
+      }
+      100%{
+          opacity: 1;
+          
+      }
+  } */

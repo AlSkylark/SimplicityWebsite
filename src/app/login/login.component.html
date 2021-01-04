@@ -1,0 +1,18 @@
+<br>
+<br>
+<div class="row">
+    <div class="four columns"><p></p></div>
+    <div class="four columns">
+        <input (click)="user.login()" class="button-primary" type="button" value="Use Google to Sign In" id="googleb">
+    </div>
+    <div class="four columns"><p></p></div>
+</div>
+<button (click)="user.logout()">sign out</button>
+<div class="row" *ngIf="user.uid | async as uid">
+    You logged in. Your UID is: {{uid}}
+    <br>
+</div>
+<br>
+<div class="row" *ngIf="user.isAdmin | async as isAdmin">
+    Is admin: {{isAdmin}}
+</div>

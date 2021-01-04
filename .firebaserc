@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "simplicitywebapp"
+  },
+  "targets": {
+    "simplicitywebapp": {
+      "hosting": {
+        "simplicitywebsite": [
+          "simplicitywebapp"
+        ]
+      }
+    }
+  }
+}

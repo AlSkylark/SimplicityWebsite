@@ -1,0 +1,95 @@
+
+.comicContainer{
+    display: grid;
+    gap: 0px 0px;
+    grid-template-areas:
+    "dropdown"
+    "comic"
+    "leftarrow"
+    "rightarrow";
+}
+  .dropdown { 
+    grid-area: dropdown; 
+    justify-self:right;
+  }
+  .leftarrow { 
+      grid-area: leftarrow; 
+      align-self: center;
+      display: none; 
+      cursor: pointer;
+    }
+  .rightarrow { 
+      grid-area: rightarrow; 
+      align-self: center;
+      display: none;
+      cursor: pointer; 
+    }
+  .comic { grid-area: comic; }
+  
+  .caption { text-align: center; }
+
+  #arrow{
+    position: relative;
+    top: -4%;
+  }
+
+.arrow {
+    fill: rgb(109, 109, 109);
+    max-width:50%;
+    transition: .3s;
+}
+.arrow:hover {
+    fill: rgb(139, 139, 139);
+    transform: translateX(-5px);
+}
+
+.rarrow {
+  fill: rgb(109, 109, 109);
+  max-width:50%;
+  transform: scaleX(-1);
+  transition: .3s;
+}
+.rarrow:hover {
+  fill: rgb(139, 139, 139);
+  transform: scaleX(-1) translateX(-5px);
+}
+
+.comicRow{
+  position: relative;
+  overflow:hidden;
+  display: grid;
+  grid-template-columns: 100% 100% 100%;
+
+}
+.comicBoxLeft{
+  width: 100%;
+  transform: translateX(-200%);
+}
+.comicBoxMain{
+  width: 100%;
+  transform: translateX(-100%);
+}
+.comicBoxRight{
+  width: 100%;
+  transform: translateX(0%);
+}
+
+.comicImage{
+    max-width:100%;
+    min-width:100%; 
+    height: auto;
+}
+
+@media only screen and (min-width: 550px){
+    .comicContainer {
+        grid-template-columns: 10% 80% 10%;
+        grid-template-rows: 10% 90%;
+        gap: 0px 0px;
+        grid-template-areas:
+          ". dropdown ."
+          "leftarrow comic rightarrow";
+        
+      }
+      .leftarrow { display:grid; justify-items: center; }
+      .rightarrow { display: grid; justify-items: center; }
+}
