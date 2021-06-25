@@ -1,14 +1,14 @@
-import { trigger, state, style, transition, animate, query, animateChild, group } from '@angular/animations'
+import { trigger, state, style, transition, animate, query, sequence, group } from '@angular/animations'
 
 //used in Main Comic Component
 export const  Animations = {
-    leftAnim: trigger('leftAnim',[
+    otherAnim: trigger('otherAnim',[
         state('true', style({
           transform: 'translateX(0%)'
         })),
         //default state
         state('false', style({
-          transform: 'translateX(-200%)'
+          transform: 'translateX(0%)'
         })),
         transition('false => true',[
           animate('0.5s ease-out')
@@ -22,45 +22,14 @@ export const  Animations = {
           transform: 'translateX(100%)'
         })),
         state('r', style({
-          transform: 'translateX(-300%)'
-        })),
-        state('rl', style({
-          transform: 'translateX(-300%)'
-        })),
-        state('lr', style({
-          transform: 'translateX(100%)'
+          transform: 'translateX(-100%)'
         })),
         // default state
         state('c', style({
-          transform: 'translateX(-100%)'
+          transform: 'translateX(0)'
         })),
-        transition('c => *',[
-          animate('0.5s ease-in')
-        ]),
-        transition('rl => c',[
-          animate('0.5s ease-out')
-        ]),
-        transition('lr => c',[
-          animate('0.5s ease-out')
-        ]),
-        transition('* => *',[
-          animate('0s')
-        ]),
-      ]),
-    rightAnim: trigger('rightAnim',[
-        state('true', style({
-          transform: 'translateX(-200%)'
-        })),
-        //default state
-        state('false', style({
-          transform: 'translateX(0%)'
-        })),
-        transition('false => true',[
-          animate('0.5s ease-out')
-        ]),
-        transition('true => false',[
-          animate('0s')
-        ]),
+        transition('c => *',[animate('0.5s ease-in')]),
+        transition('* => c',[animate('0s')])
       ])
 }
 
@@ -77,7 +46,7 @@ trigger('routeAnimations',[
         query(':leave', [
             style({ transform: 'translateX(0%)' }),
             animate('0.5s ease-in-out', style({ transform: 'translateX(-100%)' }))
-        ], { optional: true }),
+        ], { optional: true })
     ])
 ])
 ])

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DatabaseService } from 'src/app/database.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,18 +7,11 @@ import { DatabaseService } from 'src/app/database.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor( private clicks: DatabaseService ) {
+  constructor( ) {
 
    }
   ngOnInit(): void {
     
   }
 
-  last(){
-    this.clicks.sendNavbarEvent(true);
-  }
-
-  start(){
-    this.clicks.sendNavbarEvent(false);
-  }
 }

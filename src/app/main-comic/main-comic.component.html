@@ -4,7 +4,7 @@
 
                 <div class="dropdown">                    
                     <select (change)="loadSpecific($event.target.value)" name="Pages" id="selectDropdown">
-                        <option #pageDropdown *ngFor="let i of pag; let last = last" value="{{i}}">{{i}}</option>
+                        <option #pageDropdown *ngFor="let i of pag; let last = last" value="{{i}}" [selected] = "comicMain.id == i">{{i}}</option>
                     </select>
                 </div>
 
@@ -22,24 +22,14 @@
                         
                     <div class="comicRow">
 
-                        <div [@leftAnim]="leftFront"  
-                        (@leftAnim.done)="onAnimationEnd($event)" 
-                        class="comicBoxLeft">
-                            <img id="{{comicLeft.id}}" src="{{comicLeft.imgurl}}" alt="{{comicLeft.alt}}" class="comicImage">
-                            <h6 class="caption">{{comicLeft.caption}}</h6>
+                        <div [@centerAnim]="centerFront" (@centerAnim.done)="onAnimationEnd($event)" class="comicBoxMain">
+                            <app-loading *ngIf="!imgBool"></app-loading>
+                            <img [hidden]="!imgBool" (load)="imgLoad()" id="{{comicMain.id}}" src="{{comicMain.imgurl}}" alt="{{comicMain.alt}}" class="comicImage">
+                            <h6 *ngIf="imgBool" class="caption">{{comicMain.caption}}</h6>
                         </div>
 
-                        <div [@centerAnim]="centerFront" class="comicBoxMain">
-                            <app-loading *ngIf="$isLoading | async"></app-loading>
-                            <img *ngIf="imgBool" (load)="imgLoad()" id="{{comicMain.id}}" src="{{comicMain.imgurl}}" alt="{{comicMain.alt}}" class="comicImage">
-                            <h6 *ngIf="!($isLoading | async)" class="caption">{{comicMain.caption}}</h6>
-                        </div>
-
-                        <div [@rightAnim]="rightFront" 
-                        (@rightAnim.done)="onAnimationEnd($event)" 
-                        class="comicBoxRight">
-                            <img id="{{comicRight.id}}" src="{{comicRight.imgurl}}" alt="{{comicRight.alt}}" class="comicImage">
-                            <h6 class="caption">{{comicRight.caption}}</h6>
+                        <div [@otherAnim]="otherLoad" class="comicBoxLoad" [hidden] = "imgBool">
+                            <app-loading></app-loading>
                         </div>
 
                     </div>

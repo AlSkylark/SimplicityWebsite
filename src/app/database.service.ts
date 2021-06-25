@@ -1,50 +1,48 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Subject, Observable } from 'rxjs';
-import { pluck, flatMap, map } from 'rxjs/operators';
  
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * The DatabaseService is in charge to talk to the Firebase database and provides a series of 
+ * useful methods to retrieve data.
+ */
 export class DatabaseService {
   
   private listPages: Observable<any>;
-  private navbarEvent = new Subject<any>();
-  private noPages: number;
   constructor(private db: AngularFireDatabase) {
     
    }
 
-   sendNavbarEvent(latest: boolean){
-     this.navbarEvent.next(latest);
-   }
-
-   getNavbarEvent(){
-     return this.navbarEvent.asObservable();
-   }
-
-  getLast(){
-    this.listPages = this.db.list('/updates', ref => ref.orderByChild('id').limitToLast(2)).valueChanges();
+   /**
+    * Returns the last page uploaded to the database.
+    * @returns {Observable<any>} 
+    */
+  getLast(): Observable<any> {
+    this.listPages = this.db.list('/updates', ref => ref.orderByChild('id').limitToLast(1)).valueChanges();
     return this.listPages;
   }
 
-  getFirst(){
-    this.listPages = this.db.list('/updates', ref => ref.orderByChild('id').limitToFirst(2)).valueChanges();
+  /**
+   * Returns the first page uploaded to the database.
+   * @returns {Observable<any>} 
+   */
+  getFirst(): Observable<any> {
+    this.listPages = this.db.list('/updates', ref => ref.orderByChild('id').limitToFirst(1)).valueChanges();
     return this.listPages;
   }
 
-  getComics(page: number){
-    this.listPages = this.db.list('/updates', ref => ref.orderByChild('id').startAt(page - 1).limitToFirst(3)).valueChanges();
-    return this.listPages;
-  };
-
-  getSingle(page: number){
+  /**
+   * Returns whichever page you pass in the argument. 
+   * @param {number} page The page to return.
+   * @returns {Observable<any>} 
+   */
+  getPage(page: number): Observable<any> {
     this.listPages = this.db.list('/updates', ref => ref.orderByChild('id').equalTo(page)).valueChanges();
     return this.listPages;
   };
 
-  getPages(){
-    this.listPages = this.db.list('/updates', ref => ref.orderByChild('id').limitToLast(1)).valueChanges();
-    return this.listPages
-  };
+
 }

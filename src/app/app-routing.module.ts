@@ -7,14 +7,15 @@ import { MainComicComponent } from './main-comic/main-comic.component';
 import { LoadingComponent } from './loading/loading.component';
 import { CanvasComponent } from './canvas/canvas.component';
 
-export const routingComponents = [MainComicComponent,AdminPanelComponent, LoginComponent, LoadingComponent,CanvasComponent]
+export const routingComponents = [MainComicComponent,AdminPanelComponent, LoginComponent, LoadingComponent, CanvasComponent]
 
 const routes: Routes = [
-  {path:'', component: routingComponents[0]},
+  {path:'', redirectTo:'1', pathMatch: 'full'},
   {path:'admin-panel', component: routingComponents[1]},
   {path:'admin', component:routingComponents[2]},
   {path:'loading', component: routingComponents[3]},
-  {path:'canvas', component: routingComponents[4]}
+  {path:'canvas', component: routingComponents[4]},
+  {path:':pageNumber', component: routingComponents[0]}
 ];
 
 @NgModule({

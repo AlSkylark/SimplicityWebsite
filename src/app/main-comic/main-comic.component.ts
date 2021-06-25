@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { ChangeDetectorRef, AfterContentChecked} from '@angular/core';
 import {  AnimationEvent } from '@angular/animations';
 import { Animations } from 'src/animations';
 import { DatabaseService } from 'src/app/database.service';
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router'
 import { ComicPage } from 'src/app/comic-page';
 
 @Component({
@@ -12,54 +12,51 @@ import { ComicPage } from 'src/app/comic-page';
   templateUrl: './main-comic.component.html',
   styleUrls: ['./main-comic.component.css'],
   animations:[
-    Animations.leftAnim,
     Animations.centerAnim,
-    Animations.rightAnim
+    Animations.otherAnim
   ]
 })
 
 
-export class MainComicComponent implements OnInit, AfterViewInit {
+export class MainComicComponent implements OnInit{
 
   
   @ViewChildren('pageDropdown') dropdown: QueryList<any>;
-  public $isLoading: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public imgBool: boolean = true;
 
-  private select: HTMLInputElement;
-  private currentPage: number;
+  private currentPage: string;
   private noPages: number;
 
   public leftVisible: boolean = true;
   public rightVisible: boolean = true;
+  public animDir: boolean;
 
-  public leftFront: boolean = false;
   public centerFront: string = "c";
-  public rightFront: boolean = false;
+  public otherLoad: string = "";
   
-
-  public comicLeft = new ComicPage();
   public comicMain = new ComicPage();
-  public comicRight = new ComicPage();
+
 
   public pageList: Observable<any>;
-  private pages: Observable<any>;
+  private pageQueried: Observable<any>;
   
   public pag: number[] = [];
-  
-  private navbarSubscriber: Subscription;
 
-  constructor(private db: DatabaseService, private cdref: ChangeDetectorRef) 
+  constructor(private db: DatabaseService, private router: Router, private route: ActivatedRoute) 
   { 
-    //set the subscription to navbar click events
-    this.navbarSubscriber = this.db.getNavbarEvent().subscribe(latest =>
-      {
-        //if latest is clicked or start is clicked
-        if(latest == true){ this.loadLast() }else{ this.loadFirst() }
-      });
+    
+    //observer for the routing/comic page
+    this.route.params.subscribe((pN: Params) => {
+      this.currentPage = pN['pageNumber'];
+      if(pN['pageNumber'] == 'latest') { 
+        this.loadLast(); 
+      } else { 
+        this.mainComic(+this.currentPage);
+      };
+    })
     
     //get total page number then push em to page array
-    this.pageList = this.db.getPages();
+    this.pageList = this.db.getLast();
     this.pageList.subscribe(val => 
       {
         this.noPages = val[0]['id'];
@@ -69,176 +66,82 @@ export class MainComicComponent implements OnInit, AfterViewInit {
           this.pag.push(i);
         }
       });
-    //get last on first page load
-    this.pages = this.db.getLast();
   }
 
   
 
   ngOnInit(): void {
-    this.loadLast();
+    
+    
   }
 
-  ngAfterViewInit() {
-    this.dropdown.changes.subscribe(() => 
-    { 
-      this.select = (<HTMLInputElement>document.getElementById('selectDropdown'));
-      this.select.value = this.comicMain.id.toString();
-      this.currentPage = this.comicMain.id;
-    });
+  /**
+   * Main function, queries the database and shows whichever comic into the main view.
+   * @param page The page to query/show.
+   */
+  mainComic(page: number){
+    this.pageQueried = this.db.getPage(page);
+    this.pageQueried.subscribe(comic => {
+      
+      //we show the loading whilst img loads
+      this.imgBool = false;
+      
+      //attach the data to the comicmain
+      this.comicMain = new ComicPage(comic[0]['imgurl'],comic[0]['id'],comic[0]['caption'],[comic][0]['alt']);
+      console.log(this.comicMain);
+      
+      
+      //update arrows
+      this.arrowCheck();
+    })
   }
-  
+
   imgLoad(){
-    this.$isLoading.next(false);
+    this.imgBool = true;
   }
 
   loadLast(){
-    this.pages.subscribe(val =>{
-      //load left
-      this.comicLeft.changePage(val[0]['imgurl'], val[0]['id'], val[0]['caption']);
-      //load main
-      this.comicMain.changePage(val[1]['imgurl'], val[1]['id'], val[1]['caption']);
-      if (this.select) this.select.value = this.comicMain.id.toString();
-      this.toggleArrows(1);
-    });
+    this.router.navigate(['', this.noPages]);
   }
 
   loadFirst(){
-    const first = this.db.getFirst();
-    first.subscribe(val =>{
-      //load Right
-      this.comicRight.changePage(val[1]['imgurl'], val[1]['id'], val[1]['caption']);
-      //load main
-      this.comicMain.changePage(val[0]['imgurl'], val[0]['id'], val[0]['caption']);
-      if (this.select) this.select.value = this.comicMain.id.toString();
-      this.arrowCheck();
-    });
+    this.router.navigate(["/", 1]);
   }
   
   loadSpecific(page: string)
   {
-    setTimeout(()=>
-    {
-      this.$isLoading.next(true);
-      this.imgBool = false;
-      switch(page)
-      {
-        case '1':
-          this.loadFirst(); 
-        break;
-        case this.noPages.toString():
-          this.loadLast();
-        break;
-        default:
-          const chosenPage = this.db.getComics(parseInt(page));
-          chosenPage.subscribe(val =>{
-            this.comicLeft.changePage(val[0]['imgurl'],val[0]['id'],val[0]['caption']);
-            this.comicMain.changePage(val[1]['imgurl'],val[1]['id'],val[1]['caption']);;
-            this.$isLoading.next(false);
-            this.imgBool = true;
-            this.comicRight.changePage(val[2]['imgurl'],val[2]['id'],val[2]['caption']);;
-            this.arrowCheck();
-          });
-        break;
-      }
-    }, 500);
-    if (this.currentPage < parseInt(page)) {
-      this.switchComic(false, true); 
-    } else {
-      this.switchComic(true, true); 
-    }
-    this.currentPage = parseInt(page);
-    
+    this.router.navigate(["/", page]);
   }
 
-
-  onAnimationEnd( e: AnimationEvent )
-  {
-    
-    switch(e.triggerName) {
-
-      case 'leftAnim':
-        if (e.fromState.toString() == 'false'){
-          // i need to copy the imgleftsrc to mainsrc
-          this.comicRight.changePage(this.comicMain);
-          this.comicMain.changePage(this.comicLeft);
-          this.switchComic(true);
-          this.select.value = this.comicMain.id.toString();
-          //TODO: Here we query the database again
-          if(this.comicMain.id != this.noPages && this.comicMain.id != 1)
-          {
-            const prevPage = this.db.getSingle(this.comicMain.id-1);
-            prevPage.subscribe(val => {
-              this.comicLeft.changePage(val[0]['imgurl'],val[0]['id'],val[0]['caption']);
-            });
-          } else {
-            this.loadFirst();
-          }
-          this.arrowCheck();
-        }
-        break;
-      
-      case 'rightAnim':
-        if (e.fromState.toString() == 'false'){
-          // i need to copy the imgleftsrc to mainsrc
-          this.comicLeft.changePage(this.comicMain);
-          this.comicMain.changePage(this.comicRight);
-          this.switchComic(false);
-          this.select.value = this.comicMain.id.toString();
-          //TODO: Here we query the database again
-          if(this.comicMain.id != this.noPages && this.comicMain.id != 1)
-          {
-            const nextPage = this.db.getSingle(this.comicMain.id + 1);
-            nextPage.subscribe(val => {
-              this.comicRight.changePage(val[0]['imgurl'],val[0]['id'],val[0]['caption']);
-            });
-          } else {
-            this.loadLast();
-          }
-          this.arrowCheck();
-        }
-        break;
-      
-    }
-
+  loadNext(){
+    if(this.comicMain.id == this.noPages) return;
+    this.router.navigate(["/", this.comicMain.id + 1]);
+  }
+  loadPrev(){
+    if(this.comicMain.id == 1) return;
+    this.router.navigate(["/", this.comicMain.id - 1]);
   }
 
   switchComic(isLeft: boolean, isDropdown?: boolean){
-    if(isLeft == true) {
-      if(isDropdown) { 
-        this.centerFront = "l"
-        setTimeout(() => this.centerFront = "rl", 500)
-        setTimeout(() => this.centerFront = "c", 500)
-        return;}
-      if(this.leftFront == true) 
-      { 
-        this.leftFront = false;
-        this.centerFront = "c";
-      } 
-      else 
-      {
-        this.leftFront = true;
-        this.centerFront = "l";
-      }
-      
-    } else {
-      if(isDropdown) { 
-        this.centerFront = "r"
-        setTimeout(() => this.centerFront = "lr", 500)
-        setTimeout(() => this.centerFront = "c", 500)
-        return;}
-      if(this.rightFront == true) 
-      { 
-        this.rightFront = false;
-        this.centerFront = "c";
-      } 
-      else 
-      {
-        this.rightFront = true;
-        this.centerFront = "r";
-      }
-      
+    if(isLeft == true) 
+    {
+      this.centerFront = "l"
+      setTimeout(() => {this.centerFront = 'c'},650);
+      this.animDir = true;
+      //this.loadPrev();
+    } 
+    else 
+    {
+      this.centerFront = "r";
+      setTimeout(() => {this.centerFront = 'c'},650);
+      this.animDir = false;
+      //this.loadNext();
     }
+  }
+
+  onAnimationEnd(e: AnimationEvent)
+  {
+    if(e.toState == 'c' && e.fromState != 'void') {this.animDir ? this.loadPrev() : this.loadNext();}  
   }
 
   /**

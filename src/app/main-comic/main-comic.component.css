@@ -10,7 +10,7 @@
 }
   .dropdown { 
     grid-area: dropdown; 
-    justify-self:right;
+    justify-self:center;
   }
   .leftarrow { 
       grid-area: leftarrow; 
@@ -61,17 +61,13 @@
   grid-template-columns: 100% 100% 100%;
 
 }
-.comicBoxLeft{
-  width: 100%;
-  transform: translateX(-200%);
-}
-.comicBoxMain{
+.comicBoxLoad{
   width: 100%;
   transform: translateX(-100%);
 }
-.comicBoxRight{
+.comicBoxMain{
   width: 100%;
-  transform: translateX(0%);
+  transform: translateX(0);
 }
 
 .comicImage{
@@ -92,4 +88,5 @@
       }
       .leftarrow { display:grid; justify-items: center; }
       .rightarrow { display: grid; justify-items: center; }
+      .dropdown { justify-self:right; }
 }
