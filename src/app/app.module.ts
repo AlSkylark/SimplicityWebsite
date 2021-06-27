@@ -9,7 +9,15 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import * as Hammer from 'hammerjs';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG, HammerModule } from '@angular/platform-browser';
 
+export class CustomHammerConfig extends HammerGestureConfig {
+  overrides = <any> {
+    //override hammerjs default config
+    'swipe': { direction: Hammer.DIRECTION_HORIZONTAL } 
+  }
+}
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAk0YRHZ1UKRiyTm6TAeoYqR-_hgAVa1YU",
@@ -36,9 +44,13 @@ export const firebaseConfig = {
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    HammerModule
   ],
-  providers: [],
+  providers: [{
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: CustomHammerConfig
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

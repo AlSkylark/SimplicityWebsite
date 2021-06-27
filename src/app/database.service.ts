@@ -12,8 +12,17 @@ import { Subject, Observable } from 'rxjs';
 export class DatabaseService {
   
   private listPages: Observable<any>;
+  private listLogs: Observable<any>;
   constructor(private db: AngularFireDatabase) {
     
+   }
+   /**
+    * Returns all the logs in the database.
+    * @returns {Observable<any>}
+    */
+   getLogs(): Observable<any> {
+    this.listLogs = this.db.list('/logs', ref => ref.orderByChild('id')).valueChanges();
+    return this.listLogs;
    }
 
    /**

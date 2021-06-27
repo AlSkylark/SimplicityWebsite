@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
-import { ChangeDetectorRef, AfterContentChecked} from '@angular/core';
-import {  AnimationEvent } from '@angular/animations';
 import { Animations } from 'src/animations';
 import { DatabaseService } from 'src/app/database.service';
-import { Subscription, Observable, BehaviorSubject } from 'rxjs';
+import { Subscription, Observable, Subject } from 'rxjs';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router'
 import { ComicPage } from 'src/app/comic-page';
 
@@ -22,17 +20,15 @@ export class MainComicComponent implements OnInit{
 
   
   @ViewChildren('pageDropdown') dropdown: QueryList<any>;
-  public imgBool: boolean = true;
+  public mainVisible: boolean = false;
 
   private currentPage: string;
+  private getNumber: Subject<number> = new Subject<number>();
   private noPages: number;
 
   public leftVisible: boolean = true;
   public rightVisible: boolean = true;
   public animDir: boolean;
-
-  public centerFront: string = "c";
-  public otherLoad: string = "";
   
   public comicMain = new ComicPage();
 
@@ -44,12 +40,18 @@ export class MainComicComponent implements OnInit{
 
   constructor(private db: DatabaseService, private router: Router, private route: ActivatedRoute) 
   { 
-    
     //observer for the routing/comic page
     this.route.params.subscribe((pN: Params) => {
       this.currentPage = pN['pageNumber'];
-      if(pN['pageNumber'] == 'latest') { 
-        this.loadLast(); 
+      if( this.currentPage == 'latest' || isNaN(+this.currentPage) ) { 
+        //if noPages is already known
+        if(this.noPages != null){ this.loadLast() }
+
+        //this loads too fast so i made it a subject
+        this.getNumber.subscribe(val =>{
+          this.loadLast(); 
+          this.arrowCheck();
+        })
       } else { 
         this.mainComic(+this.currentPage);
       };
@@ -60,6 +62,10 @@ export class MainComicComponent implements OnInit{
     this.pageList.subscribe(val => 
       {
         this.noPages = val[0]['id'];
+
+        //send info to the observer for 'latest'
+        this.getNumber.next(this.noPages);
+
         this.pag = [];
         for(let i = 1; i < val[0]['id'] + 1; i++) 
         { 
@@ -84,12 +90,11 @@ export class MainComicComponent implements OnInit{
     this.pageQueried.subscribe(comic => {
       
       //we show the loading whilst img loads
-      this.imgBool = false;
+      if (this.comicMain.id != page) { this.mainVisible = false };
       
+
       //attach the data to the comicmain
       this.comicMain = new ComicPage(comic[0]['imgurl'],comic[0]['id'],comic[0]['caption'],[comic][0]['alt']);
-      console.log(this.comicMain);
-      
       
       //update arrows
       this.arrowCheck();
@@ -97,7 +102,7 @@ export class MainComicComponent implements OnInit{
   }
 
   imgLoad(){
-    this.imgBool = true;
+    this.mainVisible = true;
   }
 
   loadLast(){
@@ -117,32 +122,24 @@ export class MainComicComponent implements OnInit{
     if(this.comicMain.id == this.noPages) return;
     this.router.navigate(["/", this.comicMain.id + 1]);
   }
+
   loadPrev(){
     if(this.comicMain.id == 1) return;
     this.router.navigate(["/", this.comicMain.id - 1]);
   }
 
-  switchComic(isLeft: boolean, isDropdown?: boolean){
+  switchComic(isLeft: boolean){
     if(isLeft == true) 
     {
-      this.centerFront = "l"
-      setTimeout(() => {this.centerFront = 'c'},650);
-      this.animDir = true;
-      //this.loadPrev();
+      this.loadPrev();
     } 
     else 
     {
-      this.centerFront = "r";
-      setTimeout(() => {this.centerFront = 'c'},650);
-      this.animDir = false;
-      //this.loadNext();
+      this.loadNext();
     }
   }
 
-  onAnimationEnd(e: AnimationEvent)
-  {
-    if(e.toState == 'c' && e.fromState != 'void') {this.animDir ? this.loadPrev() : this.loadNext();}  
-  }
+
 
   /**
    * This toggles the arrows visible or invisible. 
@@ -174,6 +171,9 @@ export class MainComicComponent implements OnInit{
     }else if(this.comicMain.id == 1){
       this.toggleArrows(0)
     } else {
+      this.getNumber.subscribe(val =>{
+        this.arrowCheck();
+      })
       this.toggleArrows(2);
     }
   }

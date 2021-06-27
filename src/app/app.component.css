@@ -1,0 +1,9 @@
+.container { 
+    overflow:visible;
+}
+
+@media only screen and (min-width: 550px){
+    .container{
+       overflow: hidden;
+    }
+}

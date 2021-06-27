@@ -3,6 +3,11 @@
     top:-5%;
     transform:scale(50%);
   }
+  .loading{
+    max-width:100%;
+    min-width:100%; 
+    height: auto;
+  }
   .path {
     fill: transparent;
     stroke: black;

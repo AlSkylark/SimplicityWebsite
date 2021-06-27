@@ -1,25 +1,25 @@
-<div class="mobile-menu">
-    <ul class="mobile-list" >
+<div *ngIf="navHide" [@menuAnim] class="mobile-menu">
+    <ul class="mobile-list" (click)="toggleNav()">
         <li class="mobile-item"> <a [routerLink]="['1']" class="navbar-link" >start</a></li>
         <li class="mobile-item"> <a [routerLink]="['latest']" class="navbar-link" >latest</a></li>
-        <li class="mobile-item"> <a [routerLink]="['loading']" class="navbar-link" >earth logs</a></li>
+        <li class="mobile-item"> <a [routerLink]="['logs']" class="navbar-link" >earth logs</a></li>
         <li class="mobile-item"> <a [routerLink]="['admin']" class="navbar-link" >archive</a></li>
-        <li class="mobile-item"> <a [routerLink]="['canvas']" class="navbar-link" >about</a></li>
+        <li class="mobile-item"> <a [routerLink]="['loading']" class="navbar-link" >about</a></li>
     </ul>
 </div>
-<span class="toggle-button">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
+<span class="toggle-button" (click)="toggleNav()">
+    <span [@bar1Anim]="navHide" class="bar1"></span>
+    <span [@bar2Anim]="navHide" class="bar2"></span>
+    <span [@bar3Anim]="navHide" class="bar3"></span>
 </span>
 <div class="navbar-spacer">
 <nav class="navbar">
     <ul class="navbar-list" >
         <li class="navbar-item"> <a [routerLink]="['1']" class="navbar-link" >start</a></li>
         <li class="navbar-item"> <a [routerLink]="['latest']" class="navbar-link" >latest</a></li>
-        <li class="navbar-item"> <a [routerLink]="['loading']" class="navbar-link" >earth logs</a></li>
+        <li class="navbar-item"> <a [routerLink]="['logs']" class="navbar-link" >earth logs</a></li>
         <li class="navbar-item"> <a [routerLink]="['admin']" class="navbar-link" >archive</a></li>
-        <li class="navbar-item"> <a [routerLink]="['canvas']" class="navbar-link" >about</a></li>
+        <li class="navbar-item"> <a [routerLink]="['loading']" class="navbar-link" >about</a></li>
     </ul>
 
 </nav>

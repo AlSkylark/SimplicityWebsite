@@ -38,9 +38,10 @@
     justify-content: space-between;
     width: 30px;
     height: 21px;
+    z-index: 999;
     cursor: pointer;
  }
- .bar {
+ .bar1, .bar2, .bar3 {
     height:2px;
     width: 100%;
     background-color: rgb(61, 61, 61);
@@ -51,7 +52,7 @@
       position: fixed;
       top: 0%;
       height: 100%;
-      z-index: 999;
+      z-index: 99;
       background-color: white;
       width: 100%;
       left: 0;
@@ -77,6 +78,11 @@
    display: block;
    width: 100%;
  }
+
+ .bar2{
+   opacity: 0;
+ }
+
  @media only screen and (min-width: 550px){
    .navbar-list{
       display: block;

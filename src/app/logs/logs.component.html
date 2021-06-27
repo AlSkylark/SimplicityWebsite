@@ -1,0 +1,22 @@
+<div class="wcontainer">
+    <div class="outside-border">
+        <div class="window">
+            <div class="menu">
+                <div class="title">earth-logs.db</div>
+                <div class="close-button"><span class="ex"> <b>x</b> </span></div>
+            </div>
+            <div class="body">
+                <div class="littletitle">Logs:</div>
+                <div *ngFor="let log of logList | async" class="links" >
+                    <!-- [hidden]="visible[log.id - 1 ] == false && reading == true"  -->
+                    <span class="little-arrow">></span> <span (click)="loadLog(log.id)"> {{log.date}}</span> 
+                    <div class="log-content" *ngIf = "visible[log.id - 1 ]">
+                        <span> <u>Log no: {{log.dateid}}</u> </span>
+                        <span>{{log.text}}</span>
+                    </div>
+                </div> 
+                <div class="blink">▮</div>
+            </div>
+        </div>
+    </div>
+</div>
