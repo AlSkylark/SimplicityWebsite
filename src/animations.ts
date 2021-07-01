@@ -1,4 +1,4 @@
-import { trigger, state, style, transition, animate, query, sequence, group } from '@angular/animations'
+import { trigger, state, style, transition, animate, query, AUTO_STYLE, group } from '@angular/animations'
 
 //used in Main Comic Component
 export const  Animations = {
@@ -98,6 +98,33 @@ export const navAnimations = {
     ]),
     transition('true => false',[
       animate('0.3s ease-out')
+    ])
+  ])
+}
+
+export const archiveAnimations = {
+  pcontainerAnim: trigger('pcontainerAnim', [
+    state('false', style({
+      transform:'scale(0)', opacity: 0, height: 0
+    })),
+    //default state
+    state('true', style({
+      transform: 'scale(1)', opacity: 1
+    })),
+    transition('true <=> false',[
+      animate('0.2s ease-out')
+    ])
+  ]),
+  chapterAnim: trigger('chapterAnim', [
+    state('false', style({
+      height:'auto'
+    })),
+    //default state
+    state('true', style({
+      height: '*'
+    })),
+    transition('true <=> false',[
+      animate('0.2s ease-out')
     ])
   ])
 }

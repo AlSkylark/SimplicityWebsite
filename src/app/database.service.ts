@@ -13,6 +13,7 @@ export class DatabaseService {
   
   private listPages: Observable<any>;
   private listLogs: Observable<any>;
+  private listChapters: Observable<any>;
   constructor(private db: AngularFireDatabase) {
     
    }
@@ -53,5 +54,13 @@ export class DatabaseService {
     return this.listPages;
   };
 
-
+  /**
+   * Returns a list of chapters which contain the chapter name
+   * and the length/number of pages.
+   * @returns {Observable<any>}
+   */
+  getChapters(): Observable<any> {
+    this.listChapters = this.db.list('/chapters').valueChanges();
+    return this.listChapters;
+  }
 }

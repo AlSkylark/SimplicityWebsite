@@ -35,5 +35,10 @@ export class LogsComponent implements OnInit {
      
     // if(e.type == 'mouseenter') {this.dot = true} else {this.dot = false}
   }
+  closeButton(){
+    this.visible.forEach((v, i)=>{
+      this.visible[i] = false;
+    })
+  }
 
 }
