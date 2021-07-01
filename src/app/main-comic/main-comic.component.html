@@ -1,10 +1,10 @@
 <div class="row">
     <div class="twelve columns u-full-width">
-        <div class="comicContainer" (swipeleft)="switchComic(false)" (swiperight)="switchComic(true)" >
+        <div class="comicContainer"  (swipeleft)="switchComic(false)" (swiperight)="switchComic(true)" >
 
                 <div class="dropdown">                    
                     <select (change)="loadSpecific($event.target.value)" name="Pages" id="selectDropdown">
-                        <option *ngFor="let i of pag" value="{{i}}" [selected] = "comicMain.id == i">{{i}}</option>
+                        <option *appRepeat="[1, noPages]; let i" value="{{i}}" [selected] = "comicMain.id == i">{{i}}</option>
                     </select>
                 </div>
 
@@ -27,8 +27,10 @@
                         </div>
 
                         <div *ngIf="mainVisible" [@centerAnim] class="comicBoxMain">
+                            <div class="invisible-left" (tap)="switchComic(true)"></div>
                             <img id="{{comicMain.id}}" src="{{comicMain.imgurl}}" alt="{{comicMain.alt}}" class="comicImage">
                             <h6 class="caption">{{comicMain.caption}}</h6>
+                            <div class="invisible-right" (tap)="switchComic(false)"></div>
                         </div>
                         
                         <!-- This acts a a background loader, since ngIf gets rid of the component altogether -->

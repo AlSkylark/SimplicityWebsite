@@ -24,7 +24,7 @@ export class MainComicComponent implements OnInit{
 
   private currentPage: string;
   private getNumber: Subject<number> = new Subject<number>();
-  private noPages: number;
+  public noPages: number;
 
   public leftVisible: boolean = true;
   public rightVisible: boolean = true;
@@ -35,8 +35,7 @@ export class MainComicComponent implements OnInit{
 
   public pageList: Observable<any>;
   private pageQueried: Observable<any>;
-  
-  public pag: number[] = [];
+
 
   constructor(private db: DatabaseService, private router: Router, private route: ActivatedRoute) 
   { 
@@ -66,12 +65,6 @@ export class MainComicComponent implements OnInit{
         //send info to the observer for 'latest'
         this.getNumber.next(this.noPages);
 
-        //resetting the array
-        this.pag = [];
-        for(let i = 1; i < val[0]['id'] + 1; i++) 
-        { 
-          this.pag.push(i);
-        }
       });
   }
 

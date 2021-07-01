@@ -12,6 +12,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import * as Hammer from 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG, HammerModule } from '@angular/platform-browser';
 import { RepeatDirective } from './repeat.directive';
+import { FooterComponent } from './footer/footer.component';
 
 export class CustomHammerConfig extends HammerGestureConfig {
   overrides = <any> {
@@ -36,8 +37,9 @@ export const firebaseConfig = {
     AppComponent,
     HeaderComponent,
     NavbarComponent,
-    routingComponents,
     RepeatDirective,
+    FooterComponent,
+    routingComponents
   ],
   imports: [
     BrowserModule,

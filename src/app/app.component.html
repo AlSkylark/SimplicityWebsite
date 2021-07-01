@@ -1,9 +1,11 @@
-<div class="container">
-    <app-header class="u-full-width"></app-header>  
-    <app-navbar></app-navbar>
+<div class="wrap">
+    <div class="container">
+        <app-header class="u-full-width"></app-header>  
+        <app-navbar></app-navbar>
+    </div>
+    <div class="relative" [@routeAnimations]="prepareRoute(outlet)">
+        <router-outlet #outlet="outlet"></router-outlet>
+    </div>
 </div>
-<div class="relative" [@routeAnimations]="prepareRoute(outlet)">
-    <router-outlet #outlet="outlet"></router-outlet>
-</div>
-
 <br>
+<app-footer></app-footer>
