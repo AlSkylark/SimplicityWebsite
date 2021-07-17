@@ -17,6 +17,7 @@ export class ArchiveComponent implements OnInit {
   public pagesVisible: boolean = false;
   public chpsVisible: Map<string, boolean> = new Map();
   public chapters: Observable<any>;
+  public pages: Observable<any>;
 
   constructor(private db: DatabaseService) {
     this.chapters = this.db.getChapters();
@@ -26,6 +27,7 @@ export class ArchiveComponent implements OnInit {
       });
       console.log(this.chpsVisible);
     })
+    this.pages = this.db.getAllUpdates();
    }
 
   ngOnInit(): void {

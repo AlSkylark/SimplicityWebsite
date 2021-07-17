@@ -2,13 +2,15 @@
     <div class="insidewrap">
         <div class="title">Archive</div>
         <div class="underline"></div>
-        <div *ngFor="let chapter of chapters | async" class="chapters">
-            <div  (click)="chapterClick(chapter.name)" [@chapterAnim]="chpsVisible.get(chapter.name)" class="ctitle">{{chapter.name}}</div>
+        <div *ngFor="let chapter of chapters | async |keyvalue" class="chapters">
+            <div  (click)="chapterClick(chapter.value.name)" [@chapterAnim]="chpsVisible.get(chapter.value.name)" class="ctitle">
+                {{chapter.value.name}}
+            </div>
             
             <!-- Each page could show a small thumbnail on hover -->
-            <div [@pcontainerAnim]="chpsVisible.get(chapter.name)" class="pcontainer">
-                <a *appRepeat="[chapter.start, chapter.length]; let i" [routerLink]="'/' + i"> 
-                    <div class="pages">{{i}}</div>
+            <div [@pcontainerAnim]="chpsVisible.get(chapter.value.name)" class="pcontainer">
+                <a *ngFor="let page of pages | async" [routerLink]="'/' + page.id"> 
+                    <div *ngIf="page.chapter == 'chapter' + chapter.key" class="pages">{{page.id}}</div>
                 </a>
                 </div>
             

@@ -17,6 +17,11 @@ export class DatabaseService {
   constructor(private db: AngularFireDatabase) {
     
    }
+
+   public getAllUpdates(){
+    return this.db.list('updates', ref => ref.orderByChild('id')).valueChanges();
+  }
+
    /**
     * Returns all the logs in the database.
     * @returns {Observable<any>}
